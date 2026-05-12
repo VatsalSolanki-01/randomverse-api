@@ -55,14 +55,27 @@ def get_random_item(category):
             "error": f"No data available for '{category}'"
         }, 404
 
+    selected_item = random.choice(items)
+
+    # Quotes contain text + author
+    if category == "quotes":
+
+        return {
+            "category": "quote",
+            "message": selected_item["text"],
+            "author": selected_item["author"]
+        }, 200
+
+    # Advice and jokes are plain strings
     return {
         "category": category[:-1],
-        "message": random.choice(items)
+        "message": selected_item
     }, 200
 
 
 @app.route("/")
 def home():
+
     return render_template("index.html")
 
 

@@ -1,22 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RandomVerse API</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>RandomVerse</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
     <div class="container">
 
         <h1>RandomVerse</h1>
 
+        <div class="badge" id="category">
+            QUOTE
+        </div>
+
         <div class="card">
+
             <p id="message">
-                Click the button to get quote/advice/joke
+                Click the button to get inspired or laugh 
             </p>
+
+            <h3 id="author"></h3>
+
         </div>
 
         <button onclick="fetchRandomContent()">
@@ -40,16 +56,35 @@
 
             try {
 
-                const response = await fetch(randomEndpoint);
-                const data = await response.json();
+                const response =
+                    await fetch(randomEndpoint);
+
+                const data =
+                    await response.json();
 
                 document.getElementById("message").innerText =
                     data.message;
+
+                document.getElementById("category").innerText =
+                    data.category.toUpperCase();
+
+                // Show author only for quotes
+                if (data.author) {
+
+                    document.getElementById("author").innerText =
+                        "~ " + data.author;
+
+                } else {
+
+                    document.getElementById("author").innerText = "";
+                }
 
             } catch (error) {
 
                 document.getElementById("message").innerText =
                     "Failed to load content.";
+
+                document.getElementById("author").innerText = "";
 
                 console.error(error);
             }
@@ -58,4 +93,5 @@
     </script>
 
 </body>
+
 </html>
