@@ -33,11 +33,9 @@ pipeline {
                 sh 'docker push vatsalsolanki19/randomverse-api:latest'
             }
         }
-        stage('deploy'){
-            steps{
-                sh '''
-                    docker run -d -p 5000:5000 --name randomverse-api vatsalsolanki19/randomverse-api:latest
-                '''
+        stage('Deploy To Railway') {
+            steps {
+                sh 'railway up'
             }
         }
     }
