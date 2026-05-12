@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import json
 import random
 import os
@@ -12,7 +12,9 @@ def load_data():
     """
     Load JSON data from local file.
     """
+
     try:
+
         if not os.path.exists(DATA_FILE):
             raise FileNotFoundError(f"{DATA_FILE} not found")
 
@@ -33,6 +35,7 @@ def get_random_item(category):
     """
     Return a random item from a category.
     """
+
     data = load_data()
 
     if not data:
@@ -60,8 +63,14 @@ def get_random_item(category):
 
 @app.route("/")
 def home():
+    return render_template("index.html")
+
+
+@app.route("/api")
+def api_info():
+
     return jsonify({
-        "application": "Random Quotes REST API",
+        "application": "RandomVerse API",
         "status": "running",
         "available_endpoints": [
             "/",
@@ -75,6 +84,7 @@ def home():
 
 @app.route("/health")
 def health():
+
     return jsonify({
         "status": "healthy"
     })
@@ -82,21 +92,33 @@ def health():
 
 @app.route("/quote")
 def quote():
+
     response, status_code = get_random_item("quotes")
+
     return jsonify(response), status_code
 
 
 @app.route("/advice")
 def advice():
+
     response, status_code = get_random_item("advice")
+
     return jsonify(response), status_code
 
 
 @app.route("/joke")
 def joke():
+
     response, status_code = get_random_item("jokes")
+
     return jsonify(response), status_code
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+
+    port = int(os.environ.get("PORT", 5000))
+
+    app.run(
+        host="0.0.0.0",
+        port=port
+    )

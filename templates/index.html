@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RandomVerse API</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>RandomVerse</h1>
+
+        <div class="card">
+            <p id="message">
+                Click the button to get quote/advice/joke
+            </p>
+        </div>
+
+        <button onclick="fetchRandomContent()">
+            Refresh
+        </button>
+
+    </div>
+
+    <script>
+
+        async function fetchRandomContent() {
+
+            const endpoints = [
+                "/quote",
+                "/advice",
+                "/joke"
+            ];
+
+            const randomEndpoint =
+                endpoints[Math.floor(Math.random() * endpoints.length)];
+
+            try {
+
+                const response = await fetch(randomEndpoint);
+                const data = await response.json();
+
+                document.getElementById("message").innerText =
+                    data.message;
+
+            } catch (error) {
+
+                document.getElementById("message").innerText =
+                    "Failed to load content.";
+
+                console.error(error);
+            }
+        }
+
+    </script>
+
+</body>
+</html>
